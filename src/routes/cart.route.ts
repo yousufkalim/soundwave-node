@@ -9,7 +9,12 @@ import {
   changePosterQuantity,
   deletePosterFromCart,
 } from '@controllers/cart.controller';
-import { validatePoster, isValidated } from '@middleware/validations.middleware';
+import {
+  validatePoster,
+  validatePosterQuantity,
+  validatePosterDelete,
+  isValidated,
+} from '@middleware/validations.middleware';
 
 const router = Router();
 
@@ -25,8 +30,13 @@ router.post('/add-poster', validatePoster, isValidated, addPosterToCart);
 /**
  * @method patch
  */
-router.patch('/changePosterQuantity/:id', changePosterQuantity);
-router.patch('/deletePoster/:id', deletePosterFromCart);
+router.patch(
+  '/changePosterQuantity/:id',
+  validatePosterQuantity,
+  isValidated,
+  changePosterQuantity,
+);
+router.patch('/deletePoster/:id', validatePosterDelete, isValidated, deletePosterFromCart);
 
 // Export
 export default router;

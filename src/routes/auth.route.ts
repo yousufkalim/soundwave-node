@@ -1,15 +1,13 @@
 /**
  * User auth routes
- * @author Yousuf Kalim
+ * @author Rana Ameer Hamza
  */
 import { Router } from 'express';
 import { GetToken } from '@controllers/auth.controller';
-// import { checkUserAuth } from '@middleware/auth.middleware';
 
 const router = Router();
 
 /**
- * ////////////////////////// Routes /////////////////////////
  * @method get getting access token from spotify
  */
 
