@@ -1,146 +1,39 @@
 /**
- * User auth controllers
- * @author Yousuf Kalim
+ * Auth controllers
+ * @author Rana Ameer Hamza
  */
 import { Request, Response } from 'express';
-import IRequest from '@interfaces/request.interface';
-import Auth, { ChangePassword } from '@interfaces/auth.interface';
-import Users from '@models/users.model';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { sendEmail } from '@utils/sendEmail';
-import { JWT_SECRET, BCRYPT_SALT } from '@config';
+import axios from 'axios';
+import qs from 'qs';
+
+const ENV = process.env;
 
 /**
- * Login
- * @param {object} req
+ * Getting access token
+ * @param {object} _req
  * @param {object} res
  */
-export const login = async (req: Request, res: Response): Promise<Response> => {
-  const body: Auth = req.body;
 
+export const GetToken = async (req: Request, res: Response): Promise<Response> => {
   try {
-    // Getting email and password
-    const { email, password } = body;
+    const auth = `Basic ${Buffer.from(
+      `${ENV.SPOTIFY_CLIENT_ID}:${ENV.SPOTIFY_CLIENT_SECRET}`,
+    ).toString('base64')}`;
+    const authData = { grant_type: 'client_credentials' };
+    const authOptions = {
+      url: 'https://accounts.spotify.com/api/token',
+      headers: { Authorization: auth },
+      data: qs.stringify(authData),
+      method: 'POST',
+    };
 
-    // Getting user from db
-    const user = await Users.findOne({ email });
-
-    if (!user) {
-      // If user not found
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    // Comparing password
-    const isMatched = bcrypt.compareSync(password, user.password);
-
-    if (!isMatched) {
-      // If password not matched
-      return res.status(400).json({ success: false, message: 'Invalid Password' });
-    }
-
-    // Creating payload with user object
-    // @ts-expect-error
-    delete user.password; // Removing password from user object
-    const payload = { user };
-
-    // Generating token
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
-
-    return res.json({ success: true, user, token });
+    const result = await axios(authOptions);
+    const accessToken = result.data.access_token;
+    return res.status(200).json({ success: true, accessToken });
   } catch (err) {
     // Error handling
     // eslint-disable-next-line no-console
     console.log('Error ----> ', err);
     return res.status(500).json({ success: false, message: 'Internal server error' });
   }
-};
-
-/**
- * Change Password
- * @param {object} req
- * @param {object} res
- */
-export const changePassword = async (req: Request, res: Response): Promise<Response> => {
-  const { userId } = req.params;
-  const body: ChangePassword = req.body;
-
-  try {
-    const { oldPassword, newPassword, confirmPassword } = body;
-
-    if (newPassword !== confirmPassword) {
-      return res.status(400).json({
-        success: false,
-        message: 'New password and confirm password are not same',
-      });
-    }
-
-    const user = await Users.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    const isMatched = bcrypt.compareSync(oldPassword, user.password);
-
-    if (!isMatched) {
-      return res.status(400).json({ success: false, message: 'Invalid old Password' });
-    }
-
-    // Generate token
-    user.password = bcrypt.hashSync(newPassword, BCRYPT_SALT);
-
-    await user.save();
-
-    return res.json({ success: true, user });
-  } catch (err) {
-    // Error handling
-    // eslint-disable-next-line no-console
-    console.log('Error ----> ', err);
-    return res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-};
-
-/**
- * Forgot password
- * @param {object} req
- * @param {object} res
- */
-export const forgot = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const { email } = req.params;
-    const user = await Users.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    // Generating random password
-    const randomPassword = Math.random().toString(36).slice(-8);
-
-    // Sending email to user
-    await sendEmail(email, randomPassword);
-
-    // If email is sent then we have to update the password in db
-    user.password = await bcrypt.hash(randomPassword, BCRYPT_SALT);
-    await user.save();
-
-    // Done
-    return res.json({ success: true, message: 'Email sent successfully' });
-  } catch (err) {
-    // Error handling
-    // eslint-disable-next-line no-console
-    console.log('Error ----> ', err);
-    return res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-};
-
-/**
- * Confirm auth
- * @param {object} req
- * @param {object} res
- */
-export const confirmAuth = (req: IRequest, res: Response): Response => {
-  // If user authenticated
-  return res.json({ success: true, user: req.user });
 };

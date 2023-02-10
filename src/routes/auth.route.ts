@@ -3,28 +3,18 @@
  * @author Yousuf Kalim
  */
 import { Router } from 'express';
-import { login, confirmAuth, changePassword, forgot } from '@controllers/auth.controller';
-import { checkUserAuth } from '@middleware/auth.middleware';
-import {
-  validateLogin,
-  isValidated,
-  changePasswordValidate,
-} from '@middleware/validations.middleware';
+import { GetToken } from '@controllers/auth.controller';
+// import { checkUserAuth } from '@middleware/auth.middleware';
+
 const router = Router();
 
 /**
  * ////////////////////////// Routes /////////////////////////
- * @method post user login
- * @method get check auth
- * @method put change password
- * @method post forgot email
+ * @method get getting access token from spotify
  */
 
-// Read
-router.post('/login', validateLogin, isValidated, login); // Get all users at once
-router.get('/', checkUserAuth, confirmAuth); // Check user auth
-router.put('/password/:userId', checkUserAuth, changePasswordValidate, isValidated, changePassword); // Change password route
-router.put('/forgot/:email', forgot); // Forgot password
+// Routes
+router.get('/get-token', GetToken);
 
 // Export
 export default router;

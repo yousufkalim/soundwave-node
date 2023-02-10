@@ -12,42 +12,22 @@ Validations
 */
 
 // You can create multiple validations strategies (Read express-validator documentation for more details)
-// User Signup Validation
-export const validateUser = [
-  check('name', 'Name is required.').notEmpty().trim(),
-  check('email', 'Email is required.').notEmpty().isEmail().trim(),
-  check('password', 'Password is required.').notEmpty().trim().isLength({ min: 8 }),
-  check('number', 'Number is required.').notEmpty().isNumeric().trim(),
-  check('gender').trim(),
-  check('role').trim(),
-  check('address').trim(),
-  check('city').trim(),
-  check('country').trim(),
-];
 
-// User Signup Validation
-export const validateUserUpdate = [
-  check('name', 'Name is required.').notEmpty().trim(),
-  check('email', 'Email is required.').notEmpty().isEmail().trim(),
-  check('number', 'Number is required.').notEmpty().isNumeric().trim(),
-  check('gender').trim(),
-  check('role').trim(),
-  check('address').trim(),
-  check('city').trim(),
-  check('country').trim(),
-];
-
-// Login validation
-export const validateLogin = [
-  check('email', 'Email is required').notEmpty().isEmail().trim().toLowerCase(),
-  check('password', 'Password is required.').notEmpty().trim().isLength({ min: 8 }),
-];
-
-// Change password validation
-export const changePasswordValidate = [
-  check('oldPassword', 'Old Password is required.').notEmpty().trim().isLength({ min: 8 }),
-  check('newPassword', 'New password is required.').notEmpty().trim().isLength({ min: 8 }),
-  check('confirmPassword', 'Confirm password is required.').notEmpty().trim().isLength({ min: 8 }),
+// Add poster to cart
+export const validatePoster = [
+  check('totalPoster').isArray().withMessage('totalPoster must be array'),
+  check('totalPoster.*.albumName', 'Album Name is required.').notEmpty().trim(),
+  check('totalPoster.*.singerName', 'Singer Name is required.').notEmpty().trim(),
+  check('totalPoster.*.frame.frameType', 'Frame type is required.').notEmpty().trim(),
+  check('totalPoster.*.size.value', 'Frame size is required.').notEmpty().trim(),
+  check('totalPoster.*.size.unit', 'Size unit is required.').notEmpty().trim(),
+  check('totalPoster.*.unitPrice', 'Unit price is required.').notEmpty().trim().isNumeric(),
+  check('totalPoster.*.totalPrice', 'Total price is required.').notEmpty().trim().isNumeric(),
+  check('totalPoster.*.posterImage', 'posterImage is required.').notEmpty().trim(),
+  check('totalPoster.*.posterQuantity', 'Poster quantity is required.')
+    .notEmpty()
+    .trim()
+    .isNumeric(),
 ];
 
 /*
