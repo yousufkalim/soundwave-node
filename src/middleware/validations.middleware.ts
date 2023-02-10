@@ -1,6 +1,6 @@
 /**
  * All the validation
- * @author Yousuf Kalim
+ * @author Rana Ameer Hamza
  */
 import { Request, Response, NextFunction } from 'express';
 import { check, validationResult } from 'express-validator';
@@ -30,6 +30,13 @@ export const validatePoster = [
     .isNumeric(),
 ];
 
+export const validatePosterQuantity = [
+  check('posterId', 'PosterId is required.').notEmpty().trim(),
+  check('quantity', 'Poster quantity is required.').notEmpty().trim().isNumeric(),
+  check('unitPrice', 'Poster unit price is required.').notEmpty().trim().isNumeric(),
+];
+
+export const validatePosterDelete = [check('posterId', 'PosterId is required.').notEmpty().trim()];
 /*
 ======================
 Result
