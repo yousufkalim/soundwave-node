@@ -39,7 +39,7 @@ export const addPosterToCart = async (req: Request, res: Response): Promise<Resp
       }
 
       const imagePath =
-        '/uploads/' + body.totalPoster[0].albumName.replace(' ', '') + `${dateTime}` + '.png';
+        '/uploads/' + body.totalPoster[0].albumName.replace(' ', '#') + `${dateTime}` + '.png';
       fs.writeFileSync(fileRefPath + imagePath, buf, 'base64');
       body.totalPoster[0].posterImage = imagePath;
 
@@ -146,6 +146,16 @@ export const deletePosterFromCart = async (req: Request, res: Response): Promise
     if (!poster) {
       return res.status(404).json({ success: false, message: 'Poster not found in cart' });
     }
+
+    const filePath = path.join(__dirname, '../..') + poster.posterImage;
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      console.log('File has been removed');
+    });
+
     const updatedCart = await Cart.findOneAndUpdate(
       { _id: cart._id },
       {
