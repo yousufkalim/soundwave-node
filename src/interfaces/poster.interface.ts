@@ -18,6 +18,7 @@ export interface Poster {
   singerName: string;
   frame: Iframe;
   size: Isize;
+  canvasSize: string;
   unitPrice: number;
   totalPrice: number;
   posterImage: string;

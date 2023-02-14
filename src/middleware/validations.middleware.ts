@@ -21,6 +21,7 @@ export const validatePoster = [
   check('totalPoster.*.frame.frameType', 'Frame type is required.').notEmpty().trim(),
   check('totalPoster.*.size.value', 'Frame size is required.').notEmpty().trim(),
   check('totalPoster.*.size.unit', 'Size unit is required.').notEmpty().trim(),
+  check('totalPoster.*.canvasSize', 'Canvas size unit is required.').notEmpty().trim(),
   check('totalPoster.*.unitPrice', 'Unit price is required.').notEmpty().trim().isNumeric(),
   check('totalPoster.*.totalPrice', 'Total price is required.').notEmpty().trim().isNumeric(),
   check('totalPoster.*.posterImage', 'posterImage is required.').notEmpty().trim(),
