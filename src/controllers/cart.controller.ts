@@ -8,6 +8,9 @@ import { Request, Response } from 'express';
 import ICart from '@interfaces/poster.interface';
 //  import Poster from '@interfaces/poster.interface'
 import Cart from '@models/cart.model';
+import * as fs from 'fs';
+import path from 'path';
+// import path from 'path';
 /**
  * @param {object} _req
  * @param {object} res
@@ -16,12 +19,30 @@ import Cart from '@models/cart.model';
 export const addPosterToCart = async (req: Request, res: Response): Promise<Response> => {
   const body: ICart = req.body;
   try {
+    const dateTime = Date.now();
     const existingCart = body.cartId;
     if (existingCart) {
       const cart = await Cart.findById(existingCart);
       if (!cart) {
         return res.status(404).json({ success: false, message: 'Cart not found' });
       }
+      const buff = body.totalPoster[0].posterImage.replace('data:image/png;base64', '');
+      const buf = Buffer.from(buff, 'base64');
+      const fileRefPath = path.join(__dirname, '../..');
+      if (!fs.existsSync(fileRefPath)) {
+        fs.mkdir(fileRefPath, { recursive: true }, (err) => {
+          if (err) {
+            return console.error(err);
+          }
+          console.log('Directory created successfully!');
+        });
+      }
+
+      const imagePath =
+        '/uploads/' + body.totalPoster[0].albumName.replace(' ', '') + `${dateTime}` + '.png';
+      fs.writeFileSync(fileRefPath + imagePath, buf, 'base64');
+      body.totalPoster[0].posterImage = imagePath;
+
       const updatedCart = await Cart.findByIdAndUpdate(
         cart._id,
         {
@@ -32,10 +53,28 @@ export const addPosterToCart = async (req: Request, res: Response): Promise<Resp
         },
         { new: true },
       );
+
       return res.status(200).json({ success: true, cart: updatedCart });
     }
     body.totalPrice = body?.totalPoster?.reduce((a, b) => +a + +b.totalPrice, 0);
     body.shippingCost = 5;
+    const buff = body.totalPoster[0].posterImage.replace('data:image/png;base64', '');
+    const buf = Buffer.from(buff, 'base64');
+    const fileRefPath = path.join(__dirname, '../..');
+    if (!fs.existsSync(fileRefPath)) {
+      fs.mkdir(fileRefPath, { recursive: true }, (err) => {
+        if (err) {
+          return console.error(err);
+        }
+        console.log('Directory created successfully!');
+      });
+    }
+
+    const imagePath =
+      '/uploads/' + body.totalPoster[0].albumName.replace(' ', '#') + `${dateTime}` + '.png';
+    fs.writeFileSync(fileRefPath + imagePath, buf, 'base64');
+    body.totalPoster[0].posterImage = imagePath;
+
     const cart = await Cart.create(body);
     return res.status(200).json({ success: true, cart });
   } catch (err) {

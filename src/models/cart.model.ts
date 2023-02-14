@@ -26,6 +26,10 @@ const cartSchema = new Schema(
           value: { type: String, required: true },
           unit: { type: String, required: true },
         },
+        canvasSize: {
+          type: String,
+          required: true,
+        },
         unitPrice: {
           type: Number,
           required: true,
