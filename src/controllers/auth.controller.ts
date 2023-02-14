@@ -14,7 +14,7 @@ const ENV = process.env;
  * @param {object} res
  */
 
-export const GetToken = async (req: Request, res: Response): Promise<Response> => {
+export const GetToken = async (_req: Request, res: Response): Promise<Response> => {
   try {
     const auth = `Basic ${Buffer.from(
       `${ENV.SPOTIFY_CLIENT_ID}:${ENV.SPOTIFY_CLIENT_SECRET}`,
