@@ -3,7 +3,7 @@
  * @author Yousuf Kalim
  */
 import { Request, Response } from 'express';
-import { IProduct, IProductVariant } from 'shopify-api-node';
+import { Product, ProductVariant } from 'shopify-api-types';
 import Cart from '@models/cart.model';
 import axios, { AxiosResponse } from 'axios';
 
@@ -21,11 +21,11 @@ import {
  */
 export const createCheckout = async (req: Request, res: Response): Promise<Response> => {
   // Modifying shopify types
-  interface ProductVariant extends IProductVariant {
+  interface IProductVariant extends ProductVariant {
     admin_graphql_api_id: string;
   }
-  interface Product extends IProduct {
-    variants: ProductVariant[];
+  interface IProduct extends Product {
+    variants: IProductVariant[];
   }
 
   try {
@@ -72,7 +72,7 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
     // Wait for all product promises to resolve and extract the product data
     // @ts-expect-error
     const products = (await Promise.all(productPromises)) as Array<
-      AxiosResponse<{ product: Product }>
+      AxiosResponse<{ product: IProduct }>
     >;
 
     // Create an array of listing promises by mapping over the product data
