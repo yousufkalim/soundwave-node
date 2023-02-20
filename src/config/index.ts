@@ -14,3 +14,6 @@ export const COOKIE_SECRET = process.env.COOKIE_SECRET ?? 'secret';
 export const JWT_SECRET = process.env.JWT_SECRET ?? 'secret';
 export const HOST = process.env.HOST ?? 'http://localhost:5000';
 export const ORIGIN = process.env.ORIGIN ?? 'http://localhost:3000';
+export const SHOPIFY_SHOP = process.env.SHOPIFY_SHOP ?? '';
+export const SHOPIFY_ADMIN_ACCESS_TOKEN_TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN_TOKEN ?? '';
+export const SHOPIFY_STOREFRONT_ACCESS_TOKEN = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN ?? '';

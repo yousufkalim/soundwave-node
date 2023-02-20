@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/yousufkalim/node-ts-boilerplate#readme",
   "dependencies": {
+    "@shopify/shopify-api": "^6.2.0",
     "axios": "^1.2.6",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
