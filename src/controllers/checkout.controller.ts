@@ -33,7 +33,7 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
     const cart = await Cart.findById(cartId);
 
     if (!cart?.totalPoster?.length) {
-      res.status(404).json({ success: false, message: 'Cart not found' });
+      return res.status(404).json({ success: false, message: 'Cart not found' });
     }
 
     // Create an array of product promises by mapping over each item in the cart
@@ -70,7 +70,6 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
     });
 
     // Wait for all product promises to resolve and extract the product data
-    // @ts-expect-error
     const products = (await Promise.all(productPromises)) as Array<
       AxiosResponse<{ product: IProduct }>
     >;
