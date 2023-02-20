@@ -32,7 +32,7 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
     const { cartId } = req.params;
     const cart = await Cart.findById(cartId);
 
-    if (!cart) {
+    if (!cart?.totalPoster?.length) {
       res.status(404).json({ success: false, message: 'Cart not found' });
     }
 
@@ -42,7 +42,7 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
       // Send a POST request to create a new product in Shopify's admin API
       return axios({
         method: 'post',
-        url: `https://${SHOPIFY_SHOP}/admin/api/2021-10/products.json`,
+        url: `https://${SHOPIFY_SHOP}/admin/api/2023-01/products.json`,
         headers: {
           'X-Shopify-Access-Token': SHOPIFY_ADMIN_ACCESS_TOKEN_TOKEN,
         },
@@ -138,6 +138,8 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
         variables: {},
       },
     });
+
+    await Cart.findByIdAndUpdate(cartId, { totalPoster: [], totalPrice: 0 });
 
     // Done dana done
     return res.json({ success: true, checkoutURL: checkout.webUrl });
