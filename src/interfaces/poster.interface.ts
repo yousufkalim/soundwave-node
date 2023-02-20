@@ -8,17 +8,11 @@ interface Isize {
   unit: string;
 }
 
-interface Iframe {
-  frameType: string;
-  selectedFrame: string;
-}
-
 export interface Poster {
   albumName: string;
   singerName: string;
-  frame: Iframe;
+  posterType: string;
   size: Isize;
-  canvasSize: string;
   unitPrice: number;
   totalPrice: number;
   posterImage: string;
