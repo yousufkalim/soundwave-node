@@ -20,3 +20,6 @@ export const SPOTIFY_CLIENT_SECRET =
   process.env.SPOTIFY_CLIENT_SECRET ?? '40177a3141564d0a94c08ec917fac587';
 export const SPOTIFY_GET_TOKEN_URL =
   process.env.SPOTIFY_GET_TOKEN_URL ?? 'https://accounts.spotify.com/api/token';
+export const SHOPIFY_SHOP = process.env.SHOPIFY_SHOP ?? '';
+export const SHOPIFY_ADMIN_ACCESS_TOKEN_TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN_TOKEN ?? '';
+export const SHOPIFY_STOREFRONT_ACCESS_TOKEN = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN ?? '';
