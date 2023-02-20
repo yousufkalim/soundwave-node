@@ -5,8 +5,7 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import qs from 'qs';
-
-const ENV = process.env;
+import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_GET_TOKEN_URL } from '@config';
 
 /**
  * Getting access token
@@ -14,22 +13,21 @@ const ENV = process.env;
  * @param {object} res
  */
 
-export const GetToken = async (req: Request, res: Response): Promise<Response> => {
+export const GetToken = async (_req: Request, res: Response): Promise<Response> => {
   try {
-    const auth = `Basic ${Buffer.from(
-      `${ENV.SPOTIFY_CLIENT_ID}:${ENV.SPOTIFY_CLIENT_SECRET}`,
-    ).toString('base64')}`;
+    const auth = `Basic ${Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString(
+      'base64',
+    )}`;
     const authData = { grant_type: 'client_credentials' };
     const authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
+      url: SPOTIFY_GET_TOKEN_URL,
       headers: { Authorization: auth },
       data: qs.stringify(authData),
       method: 'POST',
     };
 
     const result = await axios(authOptions);
-    const accessToken = result.data.access_token;
-    return res.status(200).json({ success: true, accessToken });
+    return res.status(200).json({ success: true, accessToken: result.data.access_token });
   } catch (err) {
     // Error handling
     // eslint-disable-next-line no-console

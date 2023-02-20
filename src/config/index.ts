@@ -14,3 +14,9 @@ export const COOKIE_SECRET = process.env.COOKIE_SECRET ?? 'secret';
 export const JWT_SECRET = process.env.JWT_SECRET ?? 'secret';
 export const HOST = process.env.HOST ?? 'http://localhost:5000';
 export const ORIGIN = process.env.ORIGIN ?? 'http://localhost:3000';
+export const SPOTIFY_CLIENT_ID =
+  process.env.SPOTIFY_CLIENT_ID ?? '6267c52b15a84193903ed412d5305372';
+export const SPOTIFY_CLIENT_SECRET =
+  process.env.SPOTIFY_CLIENT_SECRET ?? '40177a3141564d0a94c08ec917fac587';
+export const SPOTIFY_GET_TOKEN_URL =
+  process.env.SPOTIFY_GET_TOKEN_URL ?? 'https://accounts.spotify.com/api/token';
