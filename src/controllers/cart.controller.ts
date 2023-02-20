@@ -57,7 +57,7 @@ export const addPosterToCart = async (req: Request, res: Response): Promise<Resp
       return res.status(200).json({ success: true, cart: updatedCart });
     }
     body.totalPrice = body?.totalPoster?.reduce((a, b) => +a + +b.totalPrice, 0);
-    body.shippingCost = 5;
+    body.shippingCost = 0;
     const buff = body.totalPoster[0].posterImage.replace('data:image/png;base64', '');
     const buf = Buffer.from(buff, 'base64');
     const fileRefPath = path.join(__dirname, '../..');

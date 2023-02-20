@@ -18,17 +18,13 @@ const cartSchema = new Schema(
           type: String,
           required: true,
         },
-        frame: {
-          frameType: { type: String, required: true },
-          selectedFrame: { type: String },
+        posterType: {
+          type: String,
+          required: true,
         },
         size: {
           value: { type: String, required: true },
           unit: { type: String, required: true },
-        },
-        canvasSize: {
-          type: String,
-          required: true,
         },
         unitPrice: {
           type: Number,
