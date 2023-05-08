@@ -154,69 +154,6 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
   }
 };
 
-// export const CreateGelatoOrder = async (_req: Request, res: Response): Promise<Response> => {
-//   try {
-//     const orderData = {
-//       orderType: 'order',
-//       orderReferenceId: 'q1w2e3r4t5',
-//       customerReferenceId: 'q1w2e3r4t5',
-//       currency: 'USD',
-//       items: [
-//         {
-//           itemReferenceId: 'q1w2e3r4t5',
-//           productUid:
-//             'apparel_product_gca_t-shirt_gsc_crewneck_gcu_unisex_gqa_classic_gsi_s_gco_white_gpr_4-4',
-//           files: [
-//             {
-//               type: 'default',
-//               url: 'https://s3-eu-west-1.amazonaws.com/developers.gelato.com/product-examples/test_print_job_BX_4-4_hor_none.pdf',
-//             },
-//             {
-//               type: 'back',
-//               url: 'https://s3-eu-west-1.amazonaws.com/developers.gelato.com/product-examples/test_print_job_BX_4-4_hor_none.pdf',
-//             },
-//           ],
-//           quantity: 100,
-//         },
-//       ],
-//       shipmentMethodUid: 'express',
-//       shippingAddress: {
-//         companyName: 'Example',
-//         firstName: 'Paul',
-//         lastName: 'Smith',
-//         addressLine1: '451 Clarkson Ave',
-//         addressLine2: 'Brooklyn',
-//         state: 'NY',
-//         city: 'New York',
-//         postCode: '11203',
-//         country: 'US',
-//         email: 'apisupport@gelato.com',
-//         phone: '123456789',
-//       },
-//     };
-
-//     const authOptions = {
-//       url: GELATO_URL,
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Basic ${GELATO_API_KEY}`,
-//       },
-//       data: orderData,
-//       method: 'POST',
-//     };
-
-//     const result = await axios(authOptions);
-//     console.log('🚀 ~ file: checkout.controller.ts:206 ~ CreateGelatoOrder ~ result:', result);
-
-//     // Done dana done
-//     return res.json({ success: true });
-//   } catch (err) {
-//     // eslint-disable-next-line no-console
-//     console.log('Error ----> ', err);
-//     return res.status(500).json({ success: false, message: 'Internal server error' });
-//   }
-// };
-
 export const webhook = async (req: Request, res: Response): Promise<Response> => {
   try {
     const cart = await Cart.findOne({ checkoutToken: req.body.checkout_token });
@@ -354,10 +291,8 @@ export const webhook = async (req: Request, res: Response): Promise<Response> =>
       method: 'POST',
     };
 
-    const result = await axios(authOptions);
-    console.log('🚀 ~ file: checkout.controller.ts:363 ~ webhook ~ result:', result);
+    await axios(authOptions);
     await Cart.findByIdAndUpdate(cart?._id, { totalPoster: [], totalPrice: 0 });
-    // Done dana done
     return res.json({ success: true });
   } catch (err) {
     // eslint-disable-next-line no-console
