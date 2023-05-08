@@ -45,6 +45,7 @@ const cartSchema = new Schema(
         },
       },
     ],
+    checkoutToken: String,
     totalPrice: {
       type: Number,
     },

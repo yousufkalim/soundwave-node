@@ -39,7 +39,13 @@ export const addPosterToCart = async (req: Request, res: Response): Promise<Resp
       }
 
       const imagePath =
-        '/uploads/' + body.totalPoster[0].albumName.replace(' ', '') + `${dateTime}` + '.png';
+        '/uploads/' +
+        body.totalPoster[0].albumName.replace(/[^a-zA-Z0-9]+/g, '') +
+        `${dateTime}` +
+        '.png';
+
+      // const imagePath =
+      //   '/uploads/' + body.totalPoster[0].albumName.replace(' ', '') + `${dateTime}` + '.png';
       fs.writeFileSync(fileRefPath + imagePath, buf, 'base64');
       body.totalPoster[0].posterImage = imagePath;
 
@@ -71,7 +77,12 @@ export const addPosterToCart = async (req: Request, res: Response): Promise<Resp
     }
 
     const imagePath =
-      '/uploads/' + body.totalPoster[0].albumName.replace(' ', '') + `${dateTime}` + '.png';
+      '/uploads/' +
+      body.totalPoster[0].albumName.replace(/[^a-zA-Z0-9]+/g, '') +
+      `${dateTime}` +
+      '.png';
+    // const imagePath =
+    //   '/uploads/' + body.totalPoster[0].albumName.replace(' ', '') + `${dateTime}` + '.png';
     fs.writeFileSync(fileRefPath + imagePath, buf, 'base64');
     body.totalPoster[0].posterImage = imagePath;
 
