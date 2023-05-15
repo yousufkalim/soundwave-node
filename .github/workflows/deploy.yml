@@ -28,7 +28,7 @@
 # Overall, this workflow provides a good starting point for deploying a Node.js backend application to a remote server using GitHub Actions.
 # However, it should be customized according to your application's specific requirements.
 
-name: 'CI/CD'
+name: 'CD'
 
 env:
   APP_NAME: ${{ vars.APP_NAME }}
