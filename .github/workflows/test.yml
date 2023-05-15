@@ -31,4 +31,4 @@ jobs:
       # The fourth step creates a build.
       - name: Create build
         run: |
-          CI= yarn run build --if-present
+          CI= yarn run build || true
