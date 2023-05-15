@@ -109,11 +109,9 @@ jobs:
             echo '${{ secrets[format('{0}_ENV_FILE', env.NODE_ENV)] }}' > ${{ env.RELEASE_PATH }}/build/.env
             echo '${{ secrets[format('{0}_NGINX', env.NODE_ENV)] }}' > ${{ env.RELEASE_PATH }}/build/nginx.conf
             sudo systemctl restart nginx
-
-      # The sixth step installs dependencies, builds the application, and starts it with PM2.
-      # PM2 is a process manager for Node.js applications that helps to ensure that the application runs continuously
-      # and can be easily managed. Ensure that this is set correctly according to your application's dependencies and build process.
-      - name: Install deps & restart PM2
+            
+      # The sixth step installs dependencies, builds the application.
+      - name: Install dependencies
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets[format('{0}_SERVER', env.NODE_ENV)] }}
@@ -123,5 +121,17 @@ jobs:
             cd ${{ env.RELEASE_PATH }}/build
             yarn install
             yarn run build
+
+      # The seventh step starts it with PM2.
+      # PM2 is a process manager for Node.js applications that helps to ensure that the application runs continuously
+      # and can be easily managed. Ensure that this is set correctly according to your application's dependencies and build process.
+      - name: Start PM2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets[format('{0}_SERVER', env.NODE_ENV)] }}
+          username: ${{ secrets[format('{0}_USER', env.NODE_ENV)] }}
+          key: ${{ secrets[format('{0}_KEY', env.NODE_ENV)] }}
+          script: |
+            cd ${{ env.RELEASE_PATH }}/build
             pm2 delete -s ${{ env.APP_NAME }}-${{ env.NODE_ENV }} || :
             pm2 start dist/index.js --name "${{ env.APP_NAME }}-${{ env.NODE_ENV }}" --update-env --env ${{ env.NODE_ENV }}
