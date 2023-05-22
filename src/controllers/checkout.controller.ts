@@ -290,8 +290,13 @@ export const webhook = async (req: Request, res: Response): Promise<Response> =>
       data: orderData,
       method: 'POST',
     };
-
-    await axios(authOptions);
+    await axios(authOptions)
+      .then((res) => {
+        console.log('res ----> ', res);
+      })
+      .catch((error) => {
+        console.log('error --->', error);
+      });
     await Cart.findByIdAndUpdate(cart?._id, { totalPoster: [], totalPrice: 0 });
     return res.json({ success: true });
   } catch (err) {
