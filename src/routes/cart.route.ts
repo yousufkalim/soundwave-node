@@ -30,13 +30,8 @@ router.post('/add-poster', validatePoster, isValidated, addPosterToCart);
 /**
  * @method patch
  */
-router.patch(
-  '/changePosterQuantity/:id',
-  validatePosterQuantity,
-  isValidated,
-  changePosterQuantity,
-);
-router.patch('/deletePoster/:id', validatePosterDelete, isValidated, deletePosterFromCart);
+router.put('/changePosterQuantity/:id', validatePosterQuantity, isValidated, changePosterQuantity);
+router.put('/deletePoster/:id', validatePosterDelete, isValidated, deletePosterFromCart);
 
 // Export
 export default router;
