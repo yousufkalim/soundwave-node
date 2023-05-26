@@ -14,6 +14,7 @@ import {
   SHOPIFY_STOREFRONT_ACCESS_TOKEN,
   GELATO_API_KEY,
   GELATO_URL,
+  HOST,
 } from '@config';
 
 /**
@@ -253,7 +254,7 @@ export const webhook = async (req: Request, res: Response): Promise<Response> =>
           files: [
             {
               type: 'default',
-              url: `https://soundwave-api-dev.falconweb.app${cart?.totalPoster[index]?.posterImage}`,
+              url: `${HOST}${cart?.totalPoster[index]?.posterImage}`,
             },
           ],
           quantity: item?.quantity,
