@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * Checkout controllers
  * @author Yousuf Kalim
@@ -39,43 +40,75 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
 
-    // Create an array of product promises by mapping over each item in the cart
     // eslint-disable-next-line @typescript-eslint/promise-function-async
-    const productPromises = cart?.totalPoster.map((item) => {
-      // Send a POST request to create a new product in Shopify's admin API
-      return axios({
-        method: 'post',
-        url: `https://${SHOPIFY_SHOP}/admin/api/2023-01/products.json`,
-        headers: {
-          'X-Shopify-Access-Token': SHOPIFY_ADMIN_ACCESS_TOKEN_TOKEN,
-        },
-        data: {
-          product: {
-            title: 'New Custom Order',
-            body_html: `
-            <p><strong>Generated Image: </strong>https://soundwave-api-dev.falconweb.app${item.posterImage}</p>
-            <p><strong>Size: </strong>${item.size.value}</p>
-            <p><strong>Type: </strong>${item.posterType}</p>
-            <p><strong>Quantity: </strong>${item.posterQuantity}</p>
-            <p><strong>Unit Price: </strong>${item.unitPrice}</p>
-            <p><strong>Total Price: </strong>${item.totalPrice}</p>
-            `,
-            product_type: 'Physical Product',
-            variants: [
-              {
-                option1: `${item.size.value} / ${item.posterType}`,
-                price: item.unitPrice,
-              },
-            ],
-          },
-        },
-      });
-    });
+    // const productPromises = [];
 
-    // Wait for all product promises to resolve and extract the product data
-    const products = (await Promise.all(productPromises)) as Array<
-      AxiosResponse<{ product: IProduct }>
-    >;
+    // = cart?.totalPoster.map((item) => {
+    //   // Send a POST request to create a new product in Shopify's admin API
+    //   return axios({
+    //     method: 'post',
+    //     url: `https://${SHOPIFY_SHOP}/admin/api/2023-01/products.json`,
+    //     headers: {
+    //       'X-Shopify-Access-Token': SHOPIFY_ADMIN_ACCESS_TOKEN_TOKEN,
+    //     },
+    //     data: {
+    //       product: {
+    //         title: 'New Custom Order',
+    //         body_html: `
+    //         <p><strong>Generated Image: </strong>https://soundwave-api-dev.falconweb.app${item.posterImage}</p>
+    //         <p><strong>Size: </strong>${item.size.value}</p>
+    //         <p><strong>Type: </strong>${item.posterType}</p>
+    //         <p><strong>Quantity: </strong>${item.posterQuantity}</p>
+    //         <p><strong>Unit Price: </strong>${item.unitPrice}</p>
+    //         <p><strong>Total Price: </strong>${item.totalPrice}</p>
+    //         `,
+    //         product_type: 'Physical Product',
+    //         variants: [
+    //           {
+    //             option1: `${item.size.value} / ${item.posterType}`,
+    //             price: item.unitPrice,
+    //           },
+    //         ],
+    //       },
+    //     },
+    //   });
+    // });
+
+    // Create an array of product by looping over each item in the cart
+
+    const products = [];
+    for (const item of cart.totalPoster) {
+      products?.push(
+        await axios({
+          // Send a POST request to create a new product in Shopify's admin API
+          method: 'post',
+          url: `https://${SHOPIFY_SHOP}/admin/api/2023-01/products.json`,
+          headers: {
+            'X-Shopify-Access-Token': SHOPIFY_ADMIN_ACCESS_TOKEN_TOKEN,
+          },
+          data: {
+            product: {
+              title: 'New Custom Order',
+              body_html: `
+              <p><strong>Generated Image: </strong>https://soundwave-api-dev.falconweb.app${item.posterImage}</p>
+              <p><strong>Size: </strong>${item.size.value}</p>
+              <p><strong>Type: </strong>${item.posterType}</p>
+              <p><strong>Quantity: </strong>${item.posterQuantity}</p>
+              <p><strong>Unit Price: </strong>${item.unitPrice}</p>
+              <p><strong>Total Price: </strong>${item.totalPrice}</p>
+              `,
+              product_type: 'Physical Product',
+              variants: [
+                {
+                  option1: `${item.size.value} / ${item.posterType}`,
+                  price: item.unitPrice,
+                },
+              ],
+            },
+          },
+        }),
+      );
+    }
 
     // Create an array of listing promises by mapping over the product data
     // eslint-disable-next-line @typescript-eslint/promise-function-async
@@ -144,8 +177,6 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
     await Cart.findByIdAndUpdate(cartId, {
       checkoutToken: checkout.id.split('?')[0].split('/').pop(),
     });
-
-    // Done dana done
 
     return res.json({ success: true, checkoutURL: checkout.webUrl });
   } catch (err) {
@@ -306,7 +337,3 @@ export const webhook = async (req: Request, res: Response): Promise<Response> =>
     return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
-
-
-
-
