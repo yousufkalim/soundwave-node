@@ -162,7 +162,7 @@ export const webhook = async (req: Request, res: Response): Promise<Response> =>
       return res.status(404).json({ success: false, message: 'Cart not found' });
     }
 
-    if (cart.totalPoster.length === 0 || cart.orderCreatedOnGelato) {
+    if (cart.totalPoster.length === 0) {
       return res
         .status(420)
         .json({ success: false, message: 'Order already placed', cart: cart?.totalPoster });
