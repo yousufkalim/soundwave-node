@@ -158,7 +158,11 @@ export const webhook = async (req: Request, res: Response): Promise<Response> =>
   try {
     const cart = await Cart.findOne({ checkoutToken: req.body.checkout_token });
 
-    if (cart?.totalPoster.length === 0) {
+    if (!cart) {
+      return res.status(404).json({ success: false, message: 'Cart not found' });
+    }
+
+    if (cart.totalPoster.length === 0 || cart.orderCreatedOnGelato) {
       return res
         .status(420)
         .json({ success: false, message: 'Order already placed', cart: cart?.totalPoster });
@@ -299,7 +303,11 @@ export const webhook = async (req: Request, res: Response): Promise<Response> =>
       .catch((error) => {
         console.log('error --->', error);
       });
-    await Cart.findByIdAndUpdate(cart?._id, { totalPoster: [], totalPrice: 0 });
+    await Cart.findByIdAndUpdate(cart?._id, {
+      orderCreatedOnGelato: true,
+      totalPoster: [],
+      totalPrice: 0,
+    });
     return res.json({ success: true });
   } catch (err) {
     // eslint-disable-next-line no-console

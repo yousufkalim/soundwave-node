@@ -9,4 +9,5 @@ export default interface Cart {
   totalPoster: Poster[];
   totalPrice: number;
   shippingCost: number;
+  orderCreatedOnGelato: boolean;
 }
