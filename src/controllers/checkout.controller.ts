@@ -141,7 +141,7 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
 
     if (NODE_ENV === 'prod') {
       RedirectURL = checkout.webUrl.replace(
-        'https://walltonez.myshopify.com',
+        'https://walltonez.com',
         'https://artgenik.myshopify.com',
       );
     }
