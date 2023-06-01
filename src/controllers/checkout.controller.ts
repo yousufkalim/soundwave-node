@@ -14,6 +14,7 @@ import {
   GELATO_API_KEY,
   GELATO_URL,
   HOST,
+  NODE_ENV,
 } from '@config';
 
 /**
@@ -136,7 +137,16 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
       checkoutToken: checkout.id.split('?')[0].split('/').pop(),
     });
 
-    return res.json({ success: true, checkoutURL: checkout.webUrl });
+    let RedirectURL = checkout.webUrl;
+
+    if (NODE_ENV === 'prod') {
+      RedirectURL = checkout.webUrl.replace(
+        'https://walltonez.myshopify.com',
+        'https://artgenik.myshopify.com',
+      );
+    }
+
+    return res.json({ success: true, checkoutURL: RedirectURL });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log('Error ----> ', err);
@@ -147,6 +157,13 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
 export const webhook = async (req: Request, res: Response): Promise<Response> => {
   try {
     const cart = await Cart.findOne({ checkoutToken: req.body.checkout_token });
+
+    if (cart?.totalPoster.length === 0) {
+      return res
+        .status(420)
+        .json({ success: false, message: 'Order already placed', cart: cart?.totalPoster });
+    }
+
     const posterUId: Record<string, string> = {
       // if no frame is selected
       '12 X 18 / No Frame': 'flat_300x450-mm-12x18-inch_200-gsm-80lb-uncoated_4-0_ver',
