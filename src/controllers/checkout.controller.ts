@@ -9,12 +9,12 @@ import axios from 'axios';
 // Load environment variables
 import {
   SHOPIFY_SHOP,
+  SHOPIFY_CUSTOM_DOMAIN,
   SHOPIFY_ADMIN_ACCESS_TOKEN_TOKEN,
   SHOPIFY_STOREFRONT_ACCESS_TOKEN,
   GELATO_API_KEY,
   GELATO_URL,
   HOST,
-  NODE_ENV,
 } from '@config';
 
 /**
@@ -123,7 +123,7 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
       },
     } = await axios({
       method: 'post',
-      url: `https://${SHOPIFY_SHOP}/api/2023-01/graphql.json`,
+      url: `https://${SHOPIFY_CUSTOM_DOMAIN}/api/2023-01/graphql.json`,
       headers: {
         'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_ACCESS_TOKEN,
       },
@@ -137,16 +137,7 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
       checkoutToken: checkout.id.split('?')[0].split('/').pop(),
     });
 
-    let RedirectURL = checkout.webUrl;
-
-    if (NODE_ENV === 'prod') {
-      RedirectURL = checkout.webUrl.replace(
-        'https://artgenik.myshopify.com',
-        'https://walltonez.com',
-      );
-    }
-
-    return res.json({ success: true, checkoutURL: RedirectURL });
+    return res.json({ success: true, checkoutURL: checkout.webUrl });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log('Error ----> ', err);
