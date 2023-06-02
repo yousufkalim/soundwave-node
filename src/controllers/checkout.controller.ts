@@ -141,8 +141,8 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
 
     if (NODE_ENV === 'prod') {
       RedirectURL = checkout.webUrl.replace(
-        'https://walltonez.com',
         'https://artgenik.myshopify.com',
+        'https://walltonez.com',
       );
     }
 
@@ -154,20 +154,15 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
   }
 };
 
-export const webhook = async (req: Request, res: Response): Promise<Response> => {
+export const webhook = async (req: Request, res: Response): Promise<void> => {
   try {
+    res.status(200).json({ success: true });
+
     const cart = await Cart.findOne({ checkoutToken: req.body.checkout_token });
 
     if (!cart) {
-      return res.status(404).json({ success: false, message: 'Cart not found' });
+      return;
     }
-
-    if (cart.totalPoster.length === 0) {
-      return res
-        .status(420)
-        .json({ success: false, message: 'Order already placed', cart: cart?.totalPoster });
-    }
-
     const posterUId: Record<string, string> = {
       // if no frame is selected
       '12 X 18 / No Frame': 'flat_300x450-mm-12x18-inch_200-gsm-80lb-uncoated_4-0_ver',
@@ -287,6 +282,7 @@ export const webhook = async (req: Request, res: Response): Promise<Response> =>
         phone: req.body?.customer?.phone,
       },
     };
+
     const authOptions = {
       url: GELATO_URL,
       headers: {
@@ -298,20 +294,17 @@ export const webhook = async (req: Request, res: Response): Promise<Response> =>
     };
     await axios(authOptions)
       .then((res) => {
-        console.log('res ----> ', res);
+        console.log('gelato res --->', res);
       })
       .catch((error) => {
         console.log('error --->', error);
       });
     await Cart.findByIdAndUpdate(cart?._id, {
-      orderCreatedOnGelato: true,
       totalPoster: [],
       totalPrice: 0,
     });
-    return res.json({ success: true });
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log('Error ----> ', err);
-    return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };

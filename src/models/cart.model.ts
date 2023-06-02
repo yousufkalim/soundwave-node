@@ -46,7 +46,6 @@ const cartSchema = new Schema(
       },
     ],
     checkoutToken: String,
-    orderCreatedOnGelato: { type: Boolean, default: false },
     totalPrice: {
       type: Number,
     },
