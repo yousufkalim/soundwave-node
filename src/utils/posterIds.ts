@@ -21,7 +21,7 @@ export const posterUId: Record<string, string> = {
     'framed_poster_mounted_700x1000-mm-28x40-inch_black_wood_w12xt22-mm_plexiglass_700x1000-mm-28x40-inch_200-gsm-80lb-uncoated_4-0_ver',
   // if Nuteral wooden frame is selected
   '12 X 18 / Nuteral Wooden Frame':
-    'framed_poster_mounted_300x450-mm-12x18-inch_natural-wood_wood_w12xt22-mm_plexiglass_300x450-mm-12x18-inch_200-gsm-80lb-coated-silk_4-0_ver',
+    'framed_poster_mounted_300x450-mm-12x18-inch_natural-wood_wood_w12xt22-mm_plexiglass_300x450-mm-12x18-inch_200-gsm-80lb-uncoated_4-0_ver',
   '16 X 20 / Nuteral Wooden Frame':
     'framed_poster_mounted_400x500-mm-16x20-inch_natural-wood_wood_w12xt22-mm_plexiglass_400x500-mm-16x20-inch_200-gsm-80lb-uncoated_4-0_ver',
   '18 X 24 / Nuteral Wooden Frame':
