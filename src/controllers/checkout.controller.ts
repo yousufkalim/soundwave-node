@@ -209,6 +209,8 @@ export const webhook = async (req: Request, res: Response): Promise<void> => {
       data: orderData,
       method: 'POST',
     };
+    console.log('🚀 ~ file: checkout.controller.ts:221 ~ webhook ~ orderData:', orderData);
+    
     await axios(authOptions)
       .then((res) => {
         console.log('gelato res -->', res);
