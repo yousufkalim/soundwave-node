@@ -19,18 +19,18 @@ export const posterUId: Record<string, string> = {
     'framed_poster_mounted_600x900-mm-24x36-inch_black_wood_w12xt22-mm_plexiglass_600x900-mm-24x36-inch_200-gsm-80lb-uncoated_4-0_ver',
   '28 X 40 / Black Wooden Frame':
     'framed_poster_mounted_700x1000-mm-28x40-inch_black_wood_w12xt22-mm_plexiglass_700x1000-mm-28x40-inch_200-gsm-80lb-uncoated_4-0_ver',
-  // if Nuteral wooden frame is selected
-  '12 X 18 / Nuteral Wooden Frame':
+  // if Natural wooden frame is selected
+  '12 X 18 / Natural Wooden Frame':
     'framed_poster_mounted_300x450-mm-12x18-inch_natural-wood_wood_w12xt22-mm_plexiglass_300x450-mm-12x18-inch_200-gsm-80lb-uncoated_4-0_ver',
-  '16 X 20 / Nuteral Wooden Frame':
+  '16 X 20 / Natural Wooden Frame':
     'framed_poster_mounted_400x500-mm-16x20-inch_natural-wood_wood_w12xt22-mm_plexiglass_400x500-mm-16x20-inch_200-gsm-80lb-uncoated_4-0_ver',
-  '18 X 24 / Nuteral Wooden Frame':
+  '18 X 24 / Natural Wooden Frame':
     'framed_poster_mounted_450x600-mm-18x24-inch_natural-wood_wood_w12xt22-mm_plexiglass_450x600-mm-18x24-inch_200-gsm-80lb-uncoated_4-0_ver',
-  '20 X 28 / Nuteral Wooden Frame':
+  '20 X 28 / Natural Wooden Frame':
     'framed_poster_mounted_500x700-mm-20x28-inch_natural-wood_wood_w12xt22-mm_plexiglass_500x700-mm-20x28-inch_200-gsm-80lb-uncoated_4-0_ver',
-  '24 X 36 / Nuteral Wooden Frame':
+  '24 X 36 / Natural Wooden Frame':
     'framed_poster_mounted_600x900-mm-24x36-inch_natural-wood_wood_w12xt22-mm_plexiglass_600x900-mm-24x36-inch_200-gsm-80lb-uncoated_4-0_ver',
-  '28 X 40 / Nuteral Wooden Frame':
+  '28 X 40 / Natural Wooden Frame':
     'framed_poster_mounted_700x1000-mm-28x40-inch_natural-wood_wood_w12xt22-mm_plexiglass_700x1000-mm-28x40-inch_200-gsm-80lb-uncoated_4-0_ver',
   // if white wooden frame is selected
   '12 X 18 / White Wooden Frame':
