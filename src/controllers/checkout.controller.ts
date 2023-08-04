@@ -51,6 +51,7 @@ export const createCheckout = async (req: Request, res: Response): Promise<Respo
               title: 'New Custom Order',
               body_html: `
               <p><strong>Generated Image: </strong>${HOST}${item.posterImage}</p>
+              <p><strong>Generated PDF: </strong>${HOST}${item.posterPdf}</p>
               <p><strong>Size: </strong>${item.size.value}</p>
               <p><strong>Type: </strong>${item.posterType}</p>
               <p><strong>Quantity: </strong>${item.posterQuantity}</p>
@@ -171,7 +172,7 @@ export const webhook = async (req: Request, res: Response): Promise<void> => {
           files: [
             {
               type: 'default',
-              url: `${HOST}${cart?.totalPoster[index]?.posterImage}`,
+              url: `${HOST}${cart?.totalPoster[index]?.posterPdf}`,
             },
           ],
           quantity: item?.quantity,
@@ -210,7 +211,7 @@ export const webhook = async (req: Request, res: Response): Promise<void> => {
       method: 'POST',
     };
     console.log('🚀 ~ file: checkout.controller.ts:221 ~ webhook ~ orderData:', orderData);
-    
+
     await axios(authOptions)
       .then((res) => {
         console.log('gelato res -->', res);
