@@ -39,6 +39,7 @@ const cartSchema = new Schema(
           type: String,
           required: true,
         },
+        posterPdf: String,
         posterQuantity: {
           type: Number,
           required: true,

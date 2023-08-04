@@ -16,6 +16,7 @@ export interface Poster {
   unitPrice: number;
   totalPrice: number;
   posterImage: string;
+  posterPdf: string;
   posterQuantity: number;
   _id?: string;
 }

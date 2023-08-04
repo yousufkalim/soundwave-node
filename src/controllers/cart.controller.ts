@@ -10,42 +10,52 @@ import ICart from '@interfaces/poster.interface';
 import Cart from '@models/cart.model';
 import * as fs from 'fs';
 import path from 'path';
-// import path from 'path';
+
 /**
- * @param {object} _req
+ * @param {object} req
  * @param {object} res
  */
-
 export const addPosterToCart = async (req: Request, res: Response): Promise<Response> => {
   const body: ICart = req.body;
   try {
     const dateTime = Date.now();
     const existingCart = body.cartId;
+
     if (existingCart) {
       const cart = await Cart.findById(existingCart);
       if (!cart) {
         return res.status(404).json({ success: false, message: 'Cart not found' });
       }
+
+      // Parsing image
       const buff = body.totalPoster[0].posterImage.replace('data:image/png;base64', '');
       const buf = Buffer.from(buff, 'base64');
-      const fileRefPath = path.join(__dirname, '../..');
-      if (!fs.existsSync(fileRefPath)) {
-        fs.mkdir(fileRefPath, { recursive: true }, (err) => {
-          if (err) {
-            return console.error(err);
-          }
-          console.log('Directory created successfully!');
-        });
+
+      // Parsing PDF
+      const PDFbuff = body.totalPoster[0].posterPdf.replace('data:application/pdf;base64,', '');
+      const PDFbuf = Buffer.from(PDFbuff, 'base64');
+
+      if (!fs.existsSync(path.join(__dirname, '../../uploads'))) {
+        fs.mkdirSync(path.join(__dirname, '../../uploads'));
       }
+
+      const fileRefPath = path.join(__dirname, '../..');
 
       const imagePath =
         '/uploads/' +
         body.totalPoster[0].albumName.replace(/[^a-zA-Z0-9]+/g, '') +
         `${dateTime}` +
         '.png';
+      const PDFPath =
+        '/uploads/' +
+        body.totalPoster[0].albumName.replace(/[^a-zA-Z0-9]+/g, '') +
+        `${dateTime}` +
+        '.pdf';
 
       fs.writeFileSync(fileRefPath + imagePath, buf, 'base64');
+      fs.writeFileSync(fileRefPath + PDFPath, PDFbuf, 'base64');
       body.totalPoster[0].posterImage = imagePath;
+      body.totalPoster[0].posterPdf = PDFPath;
 
       const updatedCart = await Cart.findByIdAndUpdate(
         cart._id,
@@ -60,28 +70,39 @@ export const addPosterToCart = async (req: Request, res: Response): Promise<Resp
 
       return res.status(200).json({ success: true, cart: updatedCart });
     }
+
     body.totalPrice = body?.totalPoster?.reduce((a, b) => +a + +b.totalPrice, 0);
     body.shippingCost = 0;
+
     const buff = body.totalPoster[0].posterImage.replace('data:image/png;base64', '');
     const buf = Buffer.from(buff, 'base64');
-    const fileRefPath = path.join(__dirname, '../..');
-    if (!fs.existsSync(fileRefPath)) {
-      fs.mkdir(fileRefPath, { recursive: true }, (err) => {
-        if (err) {
-          return console.error(err);
-        }
-        console.log('Directory created successfully!');
-      });
+
+    // Parsing PDF
+    const PDFbuff = body.totalPoster[0].posterPdf.replace('data:application/pdf;base64,', '');
+    const PDFbuf = Buffer.from(PDFbuff, 'base64');
+
+    if (!fs.existsSync(path.join(__dirname, '../../uploads'))) {
+      fs.mkdirSync(path.join(__dirname, '../../uploads'));
     }
+
+    const fileRefPath = path.join(__dirname, '../..');
 
     const imagePath =
       '/uploads/' +
       body.totalPoster[0].albumName.replace(/[^a-zA-Z0-9]+/g, '') +
       `${dateTime}` +
       '.png';
+    const PDFPath =
+      '/uploads/' +
+      body.totalPoster[0].albumName.replace(/[^a-zA-Z0-9]+/g, '') +
+      `${dateTime}` +
+      '.pdf';
 
     fs.writeFileSync(fileRefPath + imagePath, buf, 'base64');
+    fs.writeFileSync(fileRefPath + PDFPath, PDFbuf, 'base64');
+
     body.totalPoster[0].posterImage = imagePath;
+    body.totalPoster[0].posterPdf = PDFPath;
 
     const cart = await Cart.create(body);
     return res.status(200).json({ success: true, cart });
