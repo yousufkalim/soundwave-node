@@ -182,6 +182,14 @@ export const deletePosterFromCart = async (req: Request, res: Response): Promise
         console.error(err);
         return;
       }
+      console.log('Image has been removed');
+    });
+    const PDFPath = path.join(__dirname, '../..') + poster.posterPdf;
+    fs.unlink(PDFPath, (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
       console.log('File has been removed');
     });
 
